@@ -87,7 +87,7 @@ OmegaUp.on('ready', async () => {
     const tab = getSelectedValidTab(locationHash[0], contestAdmin);
 
     if (contestContestant.activeTab !== tab) {
-      (contestContestant as any).activeTab = tab;
+      contestContestant.activeTab = tab;
     }
   });
 
