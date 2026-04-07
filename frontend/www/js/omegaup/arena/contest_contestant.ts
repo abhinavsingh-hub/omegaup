@@ -439,7 +439,7 @@ OmegaUp.on('ready', async () => {
               .catch(ui.ignoreError);
           },
           'update:activeTab': (tabName: string) => {
-            (contestContestant as any).activeTab = tabName;
+            contestContestant.activeTab = tabName;
             window.location.hash = tabName;
           },
           'reset-hash': ({
