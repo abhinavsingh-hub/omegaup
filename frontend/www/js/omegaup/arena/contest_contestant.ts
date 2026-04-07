@@ -86,7 +86,7 @@ OmegaUp.on('ready', async () => {
     const locationHash = window.location.hash.replace('#', '').split('/');
     const tab = getSelectedValidTab(locationHash[0], contestAdmin);
 
-    if ((contestContestant as any).activeTab !== tab) {
+    if (contestContestant.activeTab !== tab) {
       (contestContestant as any).activeTab = tab;
     }
   });
