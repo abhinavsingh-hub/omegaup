@@ -238,7 +238,7 @@ export default class ActivityFeed extends Vue {
     if (this.showTab !== tab) {
       this.showTab = tab;
       history.pushState(null, '', `#${tab}`);
-      this.syncFromHash(); // manually update state once
+      this.syncFromHash();
     }
   }
 

@@ -537,9 +537,10 @@ OmegaUp.on('ready', async () => {
     }
   };
 
-  syncFromHash();
-
-  window.addEventListener('popstate', syncFromHash);
+  Vue.nextTick(() => {
+    syncFromHash();
+    window.addEventListener('popstate', syncFromHash);
+  });
 
   setInterval(() => {
     refreshContestClarifications({
