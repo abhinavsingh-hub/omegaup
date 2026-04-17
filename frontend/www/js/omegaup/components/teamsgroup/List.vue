@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-3 text-right">
+    <div v-if="hasTeamsGroups" class="mb-3 text-right">
       <a class="btn btn-primary mx-1" href="/teamsgroup/new/">
         {{ T.teamsGroupsCreateNew }}
       </a>
