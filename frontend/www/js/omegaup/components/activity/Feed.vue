@@ -237,7 +237,8 @@ export default class ActivityFeed extends Vue {
   onTabChange(tab: string) {
     if (this.showTab !== tab) {
       this.showTab = tab;
-      window.location.hash = tab;
+      history.pushState(null, '', `#${tab}`);
+      this.syncFromHash(); // manually update state once
     }
   }
 
@@ -250,8 +251,12 @@ export default class ActivityFeed extends Vue {
   }
 
   mounted() {
-    window.addEventListener('hashchange', this.syncFromHash);
-    this.syncFromHash(); // handle initial load
+    this.syncFromHash();
+    window.addEventListener('popstate', this.syncFromHash);
+  }
+
+  beforeDestroy() {
+    window.removeEventListener('popstate', this.syncFromHash);
   }
 
   addMapping(mapping: Mapping, key: string, value: string): void {

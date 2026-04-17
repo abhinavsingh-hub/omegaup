@@ -79,17 +79,8 @@ OmegaUp.on('ready', async () => {
 
   const activeTab = getSelectedValidTab(locationHash[0], contestAdmin);
   if (activeTab !== locationHash[0]) {
-    window.location.hash = activeTab;
+    history.replaceState(null, '', `#${activeTab}`);
   }
-
-  window.addEventListener('hashchange', () => {
-    const locationHash = window.location.hash.replace('#', '').split('/');
-    const tab = getSelectedValidTab(locationHash[0], contestAdmin);
-
-    if (contestContestant.activeTab !== tab) {
-      contestContestant.activeTab = tab;
-    }
-  });
 
   const {
     guid,
@@ -260,7 +251,8 @@ OmegaUp.on('ready', async () => {
               .then((runDetails) => {
                 this.runDetailsData = showSubmission({ request, runDetails });
                 if (request.hash) {
-                  window.location.hash = request.hash;
+                  history.pushState(null, '', `#${request.hash}`);
+                  syncFromHash();
                 }
               })
               .catch((run) => {
@@ -440,7 +432,7 @@ OmegaUp.on('ready', async () => {
           },
           'update:activeTab': (tabName: string) => {
             contestContestant.activeTab = tabName;
-            window.location.hash = tabName;
+            history.pushState(null, '', `#${tabName}`);
           },
           'reset-hash': ({
             selectedTab,
@@ -450,10 +442,12 @@ OmegaUp.on('ready', async () => {
             alias: string;
           }) => {
             if (!alias) {
-              window.location.hash = selectedTab;
+              history.pushState(null, '', `#${selectedTab}`);
+              syncFromHash();
               return;
             }
-            window.location.hash = `${selectedTab}/${alias}`;
+            history.pushState(null, '', `#${selectedTab}/${alias}`);
+            syncFromHash();
           },
           'new-submission-popup-displayed': () => {
             if (this.shouldShowFirstAssociatedIdentityRunWarning) {
@@ -533,6 +527,19 @@ OmegaUp.on('ready', async () => {
       trackRun({ run });
     }
   }
+
+  const syncFromHash = () => {
+    const locationHash = window.location.hash.replace('#', '').split('/');
+    const tab = getSelectedValidTab(locationHash[0], contestAdmin);
+
+    if (contestContestant.activeTab !== tab) {
+      contestContestant.activeTab = tab;
+    }
+  };
+
+  syncFromHash();
+
+  window.addEventListener('popstate', syncFromHash);
 
   setInterval(() => {
     refreshContestClarifications({
